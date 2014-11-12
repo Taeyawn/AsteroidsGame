@@ -1,16 +1,78 @@
-//your variable declarations here
+Star [] stars = new Star[200];
+boolean wIsPressed = false;
+SpaceShip matt = new SpaceShip();
+boolean dIsPressed = false;
+boolean aIsPressed = false;
 public void setup() 
 {
-  //your code here
+  background(0);
+  size (800,800);
+  for(int i =0; i<200; i++)
+  {
+    stars[i] = new Star();
+  }
 }
 public void draw() 
 {
-  //your code here
+  background(0);
+  for(int i = 0; i<200; i++)
+  {
+  stars[i].show();
+  }
+  matt.show();
+  matt.move();
+  if(wIsPressed == true && aIsPressed == true)
+  {
+    matt.accelerate(.1);
+    matt.rotate(-5);
+  }
+  else if(wIsPressed == true && dIsPressed == true)
+  {
+    matt.accelerate(.1);
+    matt.rotate(5);
+  }
+  else if(wIsPressed == true)
+  {
+    matt.accelerate(.1);
+  }
+  else if(aIsPressed == true)
+  {
+    matt.rotate(-5);
+  }
+  else if(dIsPressed == true)
+  {
+    matt.rotate(5);
+  }
 }
-class SpaceShip //extends Floater  
+class SpaceShip extends Floater  
 {   
-    //your code here
+  public void setX(int x){myCenterX = x;}
+  public int getX(){return (int)myCenterX;}
+  public void setY(int y){myCenterY = y;}
+  public int getY(){return (int)myCenterY;}
+  public void setDirectionX(double x){myDirectionX = x;}
+  public double getDirectionX(){return (double)myDirectionX;}
+  public void setDirectionY(double y){myDirectionY = y;}
+  public double getDirectionY(){return (double)myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection = degrees;}
+  public double getPointDirection(){return (double)myPointDirection;}
+  SpaceShip()
+  {
+    corners = 3;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+    xCorners[0] = -8;
+    yCorners[0] = -8;
+    xCorners[1] = -8;
+    yCorners[1] = 8;
+    xCorners[2] = 16;
+    yCorners[2] = 0;
+    myColor = color(255);
+    myCenterX = 400;
+    myCenterY = 400;
+  }
 }
+
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
@@ -59,7 +121,7 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     else if (myCenterX<0)
     {     
       myCenterX = width;    
-    }    
+    } 
     if(myCenterY >height)
     {    
       myCenterY = 0;    
@@ -87,4 +149,59 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     endShape(CLOSE);  
   }   
 } 
+public void keyPressed()
+{
+  if(key=='h')
+  {
+    matt.setDirectionX(0);
+    matt.setDirectionY(0);
+    matt.setX((int)(Math.random()*800));
+    matt.setY((int)(Math.random()*800));
+    matt.setPointDirection((int)(Math.random()*360));
+  }
+  if(key=='w')
+  {
+    wIsPressed = true;
+  }
+  if(key=='a')
+  {
+    aIsPressed = true;
+  }
+  if(key=='d')
+  {
+    dIsPressed = true;
+  }
+}
+
+public void keyReleased()
+{
+  if(key=='w')
+  {
+    wIsPressed = false;
+  }
+  if(key=='a')
+  {
+    aIsPressed = false;
+  }
+  if(key=='d')
+  {
+    dIsPressed = false;
+  }  
+}
+class Star
+{
+  int myX;
+  int myY;
+  Star()
+  {
+    myX = (int)(Math.random()*800);
+    myY = (int)(Math.random()*800);
+    
+  }
+  public void show()
+  {
+    fill(255,255,0);
+    ellipse(myX,myY,5,5);
+  }
+}
 
