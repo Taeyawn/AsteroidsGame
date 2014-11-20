@@ -1,6 +1,8 @@
 Star [] stars = new Star[200];
+ArrayList<Asteroid> yawn = new ArrayList<Asteroid>();
 boolean wIsPressed = false;
 SpaceShip matt = new SpaceShip();
+Asteroid tae = new Asteroid();
 boolean dIsPressed = false;
 boolean aIsPressed = false;
 public void setup() 
@@ -10,6 +12,10 @@ public void setup()
   for(int i =0; i<200; i++)
   {
     stars[i] = new Star();
+  }
+  for(int i = 0;i<10; i++)
+  {
+    yawn.add(i, new Asteroid());
   }
 }
 public void draw() 
@@ -21,6 +27,8 @@ public void draw()
   }
   matt.show();
   matt.move();
+  tae.show();
+  tae.move();
   if(wIsPressed == true && aIsPressed == true)
   {
     matt.accelerate(.1);
@@ -42,6 +50,11 @@ public void draw()
   else if(dIsPressed == true)
   {
     matt.rotate(5);
+  }
+  for(int i = 0; i<yawn.size(); i++)
+  {
+    yawn.get(i).show();
+    yawn.get(i).move();
   }
 }
 class SpaceShip extends Floater  
@@ -202,6 +215,69 @@ class Star
   {
     fill(255,255,0);
     ellipse(myX,myY,5,5);
+  }
+}
+
+class Asteroid extends Floater
+{
+  private double rotSpeed;
+  public void setX(int x){myCenterX = x;}
+  public int getX(){return (int)myCenterX;}
+  public void setY(int y){myCenterY = y;}
+  public int getY(){return (int)myCenterY;}
+  public void setDirectionX(double x){myDirectionX = x;}
+  public double getDirectionX(){return (double)myDirectionX;}
+  public void setDirectionY(double y){myDirectionY = y;}
+  public double getDirectionY(){return (double)myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection = degrees;}
+  public double getPointDirection(){return (double)myPointDirection;}
+  Asteroid()
+  {
+    rotSpeed = Math.random()*2-1;
+    corners = 6;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+    xCorners[0] = -20;
+    yCorners[0] = -16;
+    xCorners[1] = 24;
+    yCorners[1] = -22;
+    xCorners[2] = 15;
+    yCorners[2] = 8;
+    xCorners[3] = 17;
+    yCorners[3] = 15;
+    xCorners[4] = -12;
+    yCorners[4] = 10;
+    xCorners[5] = -20;
+    yCorners[5] = -13;
+    myColor = color(255,0,0);
+    myCenterX = (int)(Math.random()*800);
+    myCenterY = (int)(Math.random()*800);
+    myDirectionX = (Math.random()*7-3);
+    myDirectionY = (Math.random()*7-3);
+  }
+  public void move()
+  {
+    myCenterX += myDirectionX;   
+    myCenterY += myDirectionY;
+    myPointDirection += rotSpeed;     
+
+    //wrap around screen    
+    if(myCenterX >width)
+    {     
+      myCenterX = 0;    
+    }    
+    else if (myCenterX<0)
+    {     
+      myCenterX = width;    
+    } 
+    if(myCenterY >height)
+    {    
+      myCenterY = 0;    
+    }   
+    else if (myCenterY < 0)
+    {     
+      myCenterY = height;    
+    }   
   }
 }
 
