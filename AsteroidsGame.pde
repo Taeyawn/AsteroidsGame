@@ -55,6 +55,10 @@ public void draw()
   {
     yawn.get(i).show();
     yawn.get(i).move();
+    if(dist((float)yawn.get(i).myCenterX + 10, (float)yawn.get(i).myCenterY + 10, (float)matt.myCenterX, (float)matt.myCenterY)<20 || dist((float)yawn.get(i).myCenterX-10, (float)yawn.get(i).myCenterY-10, (float)matt.myCenterX, (float)matt.myCenterY)<20)
+    {
+      yawn.remove(i);
+    } 
   }
 }
 class SpaceShip extends Floater  
