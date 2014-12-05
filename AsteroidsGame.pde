@@ -1,8 +1,8 @@
 Star [] stars = new Star[200];
 ArrayList<Asteroid> yawn = new ArrayList<Asteroid>();
+ArrayList<Bullet> naeun = new ArrayList<Bullet>();
 boolean wIsPressed = false;
 SpaceShip matt = new SpaceShip();
-Asteroid tae = new Asteroid();
 boolean dIsPressed = false;
 boolean aIsPressed = false;
 public void setup() 
@@ -17,6 +17,7 @@ public void setup()
   {
     yawn.add(i, new Asteroid());
   }
+
 }
 public void draw() 
 {
@@ -27,8 +28,6 @@ public void draw()
   }
   matt.show();
   matt.move();
-  tae.show();
-  tae.move();
   if(wIsPressed == true && aIsPressed == true)
   {
     matt.accelerate(.1);
@@ -51,15 +50,21 @@ public void draw()
   {
     matt.rotate(5);
   }
-  for(int i = 0; i<yawn.size(); i++)
+  for(int i2 = 0; i2<yawn.size(); i2++)
   {
-    yawn.get(i).show();
-    yawn.get(i).move();
-    if(dist((float)yawn.get(i).myCenterX + 10, (float)yawn.get(i).myCenterY + 10, (float)matt.myCenterX, (float)matt.myCenterY)<20 || dist((float)yawn.get(i).myCenterX-10, (float)yawn.get(i).myCenterY-10, (float)matt.myCenterX, (float)matt.myCenterY)<20)
-    {
-      yawn.remove(i);
-    } 
+    yawn.get(i2).show();
+    yawn.get(i2).move();
   }
+  for(int i = 0; i<naeun.size(); i++)
+  {
+    naeun.get(i).show();
+    naeun.get(i).move();
+    if(naeun.get(i).getX()<10 || naeun.get(i).getX()>790 || naeun.get(i).getY() <10 || naeun.get(i).getY()>790)
+    {
+      naeun.remove(i);
+    }
+  }
+
 }
 class SpaceShip extends Floater  
 {   
@@ -87,6 +92,7 @@ class SpaceShip extends Floater
     myColor = color(255);
     myCenterX = 400;
     myCenterY = 400;
+    myPointDirection = 0;
   }
 }
 
@@ -188,6 +194,10 @@ public void keyPressed()
   {
     dIsPressed = true;
   }
+  if(key == ' ')
+  {
+    naeun.add(new Bullet(matt));
+  }
 }
 
 public void keyReleased()
@@ -281,7 +291,49 @@ class Asteroid extends Floater
     else if (myCenterY < 0)
     {     
       myCenterY = height;    
-    }   
+    } 
+      for(int i=0; i<naeun.size(); i++)
+    {
+      if(dist((float)myCenterX, (float)myCenterY, (float)naeun.get(i).getX(), (float)naeun.get(i).getY())<25) //|| dist((float)yawn.get(i2).myCenterX-10, (float)yawn.get(i2).myCenterY-10, (float)naeun.get(i).getX(), (float)naeun.get(i).getY())<20)
+      {
+        naeun.remove(i);
+        yawn.remove(this); 
+      }
+    }     
+  }
+
+}
+
+class Bullet extends Floater
+{
+  public void setX(int x){myCenterX = x;}
+  public int getX(){return (int)myCenterX;}
+  public void setY(int y){myCenterY = y;}
+  public int getY(){return (int)myCenterY;}
+  public void setDirectionX(double x){myDirectionX = x;}
+  public double getDirectionX(){return (double)myDirectionX;}
+  public void setDirectionY(double y){myDirectionY = y;}
+  public double getDirectionY(){return (double)myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection = degrees;}
+  public double getPointDirection(){return (double)myPointDirection;}
+  Bullet(SpaceShip theShip)
+  {
+    myColor = color(255);
+    myCenterX = matt.myCenterX;
+    myCenterY = matt.myCenterY;
+    myPointDirection = matt.myPointDirection;
+    double dRadians = myPointDirection*(Math.PI/180);
+    myDirectionX = 5 * Math.cos(dRadians) + matt.myDirectionX;
+    myDirectionY = 5 * Math.sin(dRadians) + matt.myDirectionY;
+  }
+  public void show()
+  {
+    fill(myColor);
+    stroke(myColor);
+    double dRadians = myPointDirection*(Math.PI/180);
+    beginShape();
+    ellipse((float)myCenterX, (float)myCenterY, (float)10, (float)10);
+    endShape(CLOSE);
   }
 }
 
